@@ -1,7 +1,10 @@
 'use strict';
 
+const path = require("path");
+const fs = require("fs");
 const multer = require("multer");
 const printer = require("../lib/printer");
+const cos = require("../lib/cos");
 
 function upload(request, response) {
     // initial a print util
@@ -33,7 +36,28 @@ function upload(request, response) {
         console.log("#1. File uploaded to server:");
         console.log(JSON.stringify(file, null, 4));
         
-        print({ file });
+        uploadToCos(file);
+    }
+    
+    function uploadToCos(file) {
+        // upload file to cos
+        const uploadPath = `/uploads/${file.filename}${path.extname(file.originalname)}`;
+        cos.upload(file.path, 'image', uploadPath, file.filename, (cosResult) => {
+            
+            console.log("#2. File uploaded to cos:");
+            console.log(JSON.stringify(cosResult, null, 4));
+            
+            // upload to cos error
+            if (cosResult.code) {
+                print({ cosError: cosResult });
+                return;
+            }
+            
+            // clean up local store
+            fs.unlink(file.path);
+            
+            print({ file, cosResult });
+        });
     }
 }
 module.exports = upload;
