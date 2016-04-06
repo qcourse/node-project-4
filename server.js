@@ -11,6 +11,8 @@ function start(port) {
         response.end();
     });
     
+    app.use("/upload", require("./handle/upload"));
+    
     app.listen(port || 3000);
 }
 
