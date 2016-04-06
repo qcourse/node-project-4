@@ -10,44 +10,20 @@ const ObjectId = require("mongodb").ObjectId;
  */
 const meta = (request, response) => async (function * () {
     const print = printer(request, response);
+    
+    // TODO: Remember to add body-parse in server.js
     const body = request.body;
-    const id = body.id;
-    const meta = body.meta;
+    const id = body && body.id;
+    const meta = body && body.meta;
     
-    // parameter checks
-    if (!id) {
-        print({ error: "Specific `id` to tell the server which image meta to update" });
-        return;
-    }
-    if (!meta) {
-        print({ error: "No meta specific" });
-        return;
-    }
+    // TODO: Parameter checks
     
-    // connect to mongo db
-    let db;
-    try {
-        db = yield mongo.connect();
-    } catch (mongoError) {
-        print({ mongoError });
-        return;
-    }
     
-    // find and update
-    try {
-        const collection = db.collection("images");
-        
-        const query = { _id: ObjectId(id) };
-        const update = { $set: { meta } };
-        const result = yield collection.findOneAndUpdate(query, update);
-        
-        print({ result });
-        
-    } catch (error) {
-        print({ error });
-    } finally {
-        db.close();
-    }
+    // TODO: Connect to MongoDB
+    
+    // TODO: Find match image and update meta
+    
+    print({ message: "Not implement" });
 });
 
 module.exports = meta;

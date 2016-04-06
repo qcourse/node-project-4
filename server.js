@@ -6,8 +6,7 @@ const bodyParser = require("body-parser");
 function start(port) {
     const app = express();
     
-    app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(bodyParser.json());
+    // TODO add body-parse here
     
     // tells the client the server can work.
     app.get("/", (request, response) => {

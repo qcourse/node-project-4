@@ -14,48 +14,13 @@ const handleDelete = (request, response) => async (function * () {
     const body = request.body;
     const id = body.id;
     
-    console.log(body);
+    // TODO: parameter checks
     
-    // parameter checks
-    if (!id) {
-        print({ error: "Specific `id` to tell the server which image to delete" });
-        return;
-    }
+    // TODO: connect to mongo db
     
-    // connect to mongo db
-    let db;
-    try {
-        db = yield mongo.connect();
-    } catch (mongoError) {
-        print({ mongoError });
-        return;
-    }
+    // TODO: find and delete
     
-    // find and update
-    try {
-        const collection = db.collection("images");
-        
-        const query = { _id: ObjectId(id) };
-        const found = yield collection.find(query).next();
-        
-        if (found) {
-            const path = found.cos.resource_path;
-            const cosDeleteResult = yield cos.delete('image', path);
-            
-            const mongoDeleteResult = yield collection.deleteOne(query);
-            
-            print({ cosDeleteResult, mongoDeleteResult }); 
-        } else {
-            print({ message: `image not found with id "${id}"` });   
-        }
-        
-    } catch (error) {
-        console.log(error);
-        console.log(error.stack);
-        print({ error });
-    } finally {
-        db.close();
-    }
+    print({ message: "not implememted" });
 });
 
 module.exports = handleDelete;

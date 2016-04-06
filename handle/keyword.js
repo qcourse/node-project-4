@@ -8,28 +8,11 @@ const searchhistory = (request, response) => async (function * () {
     const print = printer(request, response);
     const params = request.query;
     
-    let db;
+    // TODO: Connect to db
     
-    try {
-        db = yield mongo.connect();
-    } catch (mongoError) {
-        print(mongoError);
-        return;
-    }
+    // TODO: List all keywords
     
-    try {
-        const searchHistory = db.collection('keywords');
-        const history = yield searchHistory.find().toArray();
-        print({ history });
-    
-        db.close();
-    } catch (error) {
-        console.error(error);
-        console.log(error.stack);
-        print({ error });
-    } finally {
-        db.close();
-    }
+    print({ message: "not implememted" });
 });
 
 module.exports = searchhistory;
