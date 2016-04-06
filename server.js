@@ -12,6 +12,7 @@ function start(port) {
     });
     
     app.use("/upload", require("./handle/upload"));
+    app.use("/list", require("./handle/list"));
     
     app.listen(port || 3000);
 }
