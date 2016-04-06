@@ -5,6 +5,7 @@ const fs = require("fs");
 const multer = require("multer");
 const printer = require("../lib/printer");
 const cos = require("../lib/cos");
+const mongo = require("../lib/mongo");
 
 function upload(request, response) {
     // initial a print util
@@ -56,7 +57,43 @@ function upload(request, response) {
             // clean up local store
             fs.unlink(file.path);
             
-            print({ file, cosResult });
+            // prepare file info, insert to mongodb later
+            const fileInfo = {
+                name: file.originalname,
+                size: file.size,
+                mime: file.mimetype,
+                url: cosResult.data.access_url,
+                cos: cosResult.data, // save all cos context
+                meta: {}
+            };
+            
+            saveToMongo(fileInfo);
+        });
+    }
+    
+    function saveToMongo(fileInfo) {
+        // connect to mongodb
+        mongo.connect((mongoError, db) => {
+            if (mongoError) {
+                print({ mongoError });
+                db.close();
+                return;
+            }
+            
+            // insert fileInfo to the `image` connection 
+            const collection = db.collection("images");
+            collection.insertOne(fileInfo, (insertError, insertResult) => {
+                if (insertError) {
+                    print({ insertError });
+                    db.close();
+                    return;
+                }
+                console.log("#3. Saved to mongodb:");
+                console.log(JSON.stringify({ insertResult, fileInfo }, null, 4));
+                
+                print({ fileInfo });
+                db.close();
+            });
         });
     }
 }

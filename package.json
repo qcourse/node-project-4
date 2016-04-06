@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.13.4",
+    "mongodb": "^2.1.14",
     "multer": "^1.1.0",
     "qcloud_cos": "^1.0.4"
   }
