@@ -1,12 +1,9 @@
 'use strict';
 
 const express = require("express");
-const bodyParser = require("body-parser");
 
 function start(port) {
     const app = express();
-    
-    // TODO add body-parse here
     
     // tells the client the server can work.
     app.get("/", (request, response) => {
@@ -14,13 +11,7 @@ function start(port) {
         response.end();
     });
     
-    app.use("/upload", require("./handle/upload"));
-    app.use("/list", require("./handle/list"));
-    app.use("/meta", require("./handle/meta"));
-    app.use("/keyword", require("./handle/keyword"));
-    app.use("/delete", require("./handle/delete"));
-    
     app.listen(port || 3000);
 }
 
-exports.start = start;
+start();
