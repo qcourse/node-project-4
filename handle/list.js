@@ -19,6 +19,7 @@ const list = (request, response) => async (function * () {
     
     try {
         const imageCollection = db.collection("images");
+        const keywordCollection = db.collection('keywords');
         
         let criteria = {};
         
@@ -28,6 +29,18 @@ const list = (request, response) => async (function * () {
             const search = new RegExp(keyword);
             console.log("search: " + keyword);
             criteria.$or = ['name', 'meta.author', 'meta.labels', 'meta.alt'].map(field => ({ [field]: search }));
+            
+            // add to search history
+            const history = keywordCollection.find({ keyword });
+            const found = yield history.next();
+
+            // update count or insert 
+            if (found) {
+                const count = found.count + 1;
+                keywordCollection.findOneAndUpdate({ keyword }, { $set: { keyword, count, last: new Date() } });
+            } else {
+                keywordCollection.insert({ keyword, count: 1, last: new Date() });
+            }
         }
         
         const total = yield imageCollection.count(criteria);

@@ -18,6 +18,7 @@ function start(port) {
     app.use("/upload", require("./handle/upload"));
     app.use("/list", require("./handle/list"));
     app.use("/meta", require("./handle/meta"));
+    app.use("/keyword", require("./handle/keyword"));
     
     app.listen(port || 3000);
 }
