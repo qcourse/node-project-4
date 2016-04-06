@@ -6,14 +6,14 @@ const bodyParser = require("body-parser");
 function start(port) {
     const app = express();
     
-    app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(bodyParser.json());
-    
     // tells the client the server can work.
     app.get("/", (request, response) => {
         response.write("It works!");
         response.end();
     });
+
+    // 注意放在所有路由前面
+    app.use(bodyParser.json());
     
     app.use("/upload", require("./handle/upload"));
     app.use("/list", require("./handle/list"));
@@ -24,4 +24,4 @@ function start(port) {
     app.listen(port || 3000);
 }
 
-exports.start = start;
+start();

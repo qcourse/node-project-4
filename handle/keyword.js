@@ -4,24 +4,24 @@ const async = require("co");
 const printer = require("../lib/printer");
 const mongo = require("../lib/mongo");
 
-const searchhistory = (request, response) => async (function * () {
+const keywordHistory = (request, response) => async (function * () {
     const print = printer(request, response);
     const params = request.query;
-    
+
     let db;
-    
+
     try {
         db = yield mongo.connect();
     } catch (mongoError) {
         print(mongoError);
         return;
     }
-    
+
     try {
-        const searchHistory = db.collection('keywords');
-        const history = yield searchHistory.find().toArray();
+        const keywords = db.collection('keywords');
+        const history = yield keywords.find().toArray();
         print({ history });
-    
+
         db.close();
     } catch (error) {
         console.error(error);
@@ -32,4 +32,4 @@ const searchhistory = (request, response) => async (function * () {
     }
 });
 
-module.exports = searchhistory;
+module.exports = keywordHistory;

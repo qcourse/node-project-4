@@ -31,7 +31,7 @@ const handleDelete = (request, response) => async (function * () {
         return;
     }
     
-    // find and update
+    // find and delete
     try {
         const collection = db.collection("images");
         

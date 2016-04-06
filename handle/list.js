@@ -33,13 +33,13 @@ const list = (request, response) => async (function * () {
             // add to search history
             const history = keywordCollection.find({ keyword });
             const found = yield history.next();
-            
+
             // update count or insert 
             if (found) {
                 const count = found.count + 1;
                 keywordCollection.findOneAndUpdate({ keyword }, { $set: { keyword, count, last: new Date() } });
             } else {
-                yield keywordCollection.insert({ keyword, count: 1, last: new Date() });
+                keywordCollection.insert({ keyword, count: 1, last: new Date() });
             }
         }
         
@@ -64,8 +64,6 @@ const list = (request, response) => async (function * () {
             list, 
             paging: { pageIndex, pageSize } 
         });
-    
-        db.close();
     } catch (error) {
         console.log(error);
         print({ error });

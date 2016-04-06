@@ -1,10 +1,10 @@
 'use strict';
 
-const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const multer = require("multer");
 const printer = require("../lib/printer");
-const cos = require('../lib/cos');
+const cos = require("../lib/cos");
 const mongo = require("../lib/mongo");
 
 function upload(request, response) {
@@ -97,6 +97,4 @@ function upload(request, response) {
         });
     }
 }
-
-
 module.exports = upload;
