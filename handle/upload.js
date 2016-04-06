@@ -13,7 +13,12 @@ function upload(request, response) {
     
     console.log("#0. Start processing upload...");
     // use multer to handle the upload process
-    const processUpload = multer({ dest: "/data/uploads/case3.qcourse.net"}).single('image');
+    const processUpload = multer({ 
+        dest: "/data/uploads/project4.qcourse.net",
+        limits: {
+            fileSize: 3 * 1024 * 1024, // support max size at 3M
+        }
+    }).single('image');
     processUpload(request, response, uploadToServer);
     
     function uploadToServer(uploadError) {
